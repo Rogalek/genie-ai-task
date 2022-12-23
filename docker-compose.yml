@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  db:
+    ports:
+      - "5432:5432"
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: assignment
+      POSTGRES_DB: assignment
+    volumes:
+      - db-assignment_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: pg_isready -U assignment -d assignment
+      interval: 2s
+      timeout: 3s
+      retries: 40
+
+volumes:
+  db-assignment_data:
+    name: genie-assignment_data
