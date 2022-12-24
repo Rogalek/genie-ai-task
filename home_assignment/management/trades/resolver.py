@@ -21,7 +21,7 @@ class Trade:
 async def get_trades(
             base_asset_symbol: typing.Optional[str] = None,
             cursor: str = None,
-            limit: int = 10,
+            limit: int = 11,
             info: GenieInfo = None
         ) -> typing.Tuple[list[Trade], int]:
     with info.context.session_factory.begin() as session:

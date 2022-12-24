@@ -47,17 +47,18 @@ async def _get_trades(
         ) -> Connection[Trade]:
     """"""
     after = base64.b64decode(after).decode() if after is not UNSET else None
-    trades, count = await get_trades(base_asset_symbol, after, first, info)
+    trades, count = await get_trades(base_asset_symbol, after, first + 1, info)
+    has_next_page = len(trades) > first
 
     edges = [
         Edge(node=trade, cursor=build_trade_cursor(trade))
-        for trade in trades
+        for trade in trades[:-1]
     ]
 
     return Connection(
         page_info=PageInfo(
             has_previous_page=False,
-            has_next_page=count > first,
+            has_next_page=has_next_page,
             count=count,
             start_cursor=edges[0].cursor if edges else None,
             end_cursor=edges[-1].cursor if len(edges) > 1 else None,
