@@ -9,10 +9,10 @@ from .database import query_trades
 class Trade:
     id: str
     base_asset_symbol: str
-    amount: float
+    amount: str
     quote_asset_symbol: str
-    price: float
-    fee: float
+    price: str
+    fee: str
     fee_currency: str
     placed_at: str
     labels: typing.List[typing.Tuple[str, str]]
