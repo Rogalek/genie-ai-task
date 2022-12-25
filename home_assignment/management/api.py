@@ -50,10 +50,17 @@ async def _get_trades(
     trades, count = await get_trades(base_asset_symbol, after, first + 1, info)
     has_next_page = len(trades) > first
 
-    edges = [
-        Edge(node=trade, cursor=build_trade_cursor(trade))
-        for trade in trades[:-1]
-    ]
+    if trades:
+        if has_next_page:
+            trades_list = trades[:-1]
+        else:
+            trades_list = trades
+        edges = [
+            Edge(node=trade, cursor=build_trade_cursor(trade))
+            for trade in trades_list
+        ]
+    else:
+        edges = []
 
     return Connection(
         page_info=PageInfo(
