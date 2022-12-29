@@ -25,15 +25,15 @@ async def get_trades(
             info: GenieInfo = None
         ) -> typing.Tuple[list[Trade], int]:
     with info.context.session_factory.begin() as session:
-        trades, count = query_trades(session, base_asset_symbol, cursor, limit)
+        rows, count = query_trades(session, base_asset_symbol, cursor, limit)
         return [Trade(
-            id=trade.id_,
-            base_asset_symbol=trade.base.symbol,
-            amount=trade.amount,
-            quote_asset_symbol=trade.quote.symbol,
-            price=trade.price,
-            fee=trade.fee.amount,
-            fee_currency=trade.fee.currency.symbol,
-            placed_at=trade.placed_at,
-            labels=[(label.key.name, label.value) for label in trade.labels],
-        ) for trade in trades], count
+            id=row.trade_id,
+            base_asset_symbol=row.base_symbol,
+            amount=row.trade_amount,
+            quote_asset_symbol=row.quote_symbol,
+            price=row.trade_price,
+            fee=row.fee_amount,
+            fee_currency=row.fee_currency,
+            placed_at=row.trade_placed_at,
+            labels=row.trade_labels,
+        ) for row in rows], count
